@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-@Library('sec_ci_libs@gh_syncing') _
+@Library('sec_ci_libs') _
 
 def master_branches = ["v0.5.3-zkfix", ] as String[]
 
