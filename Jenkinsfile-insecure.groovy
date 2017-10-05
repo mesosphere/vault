@@ -6,8 +6,8 @@ stage('Calculate git-related vars') {
     // https://issues.jenkins-ci.org/browse/JENKINS-35230
     def gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
 
-    nameByBranch = "mesosphereci/vault:${env.BRANCH_NAME}"
-    nameByCommit = "mesosphereci/vault:${gitCommit}"
+    nameByBranch = "mesosphere/vault:${env.BRANCH_NAME}"
+    nameByCommit = "mesosphere/vault:${gitCommit}"
 
     // Some debugging:
     sh 'env | sort '
@@ -28,7 +28,7 @@ try {
         sh 'make build'
     }
 
-    stage('Build mesosphereci/vault container') {
+    stage('Build mesosphere/vault container') {
         sh "docker build --rm --force-rm -t ${nameByBranch} -f ./Dockerfile.publish ./"
         sh "docker tag ${nameByBranch} ${nameByCommit}"
     }
