@@ -354,7 +354,23 @@ func (c *Conn) resendZkAuth(reauthReadyChan chan struct{}) {
 			continue
 		}
 
-		res := <-resChan
+		// Make sure that response can be actually read. If the connection is
+		// closed after writing credentials it is possible that `<-resChan`
+		// would hang in the deadlock. If the `recvLoop` exists due to
+		// the connection error, the goroutine that started `recvLoop` will
+		// close the `c.closeChan`. That means that here we'll either read
+		// the response or exit due to closed channel.
+		var res response
+		select {
+		case res = <-resChan:
+		case <-c.closeChan:
+			c.logger.Printf("Recv closed, cancel re-submitting credentials")
+			return
+		case <-c.shouldQuit:
+			c.logger.Printf("Should quit, cancel re-submitting credentials")
+			return
+		}
+
 		if res.err != nil {
 			c.logger.Printf("Credential re-submit failed: %s", res.err)
 			// FIXME(prozlach): lets ignore errors for now
