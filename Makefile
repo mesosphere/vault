@@ -101,4 +101,15 @@ hana-database-plugin:
 mongodb-database-plugin:
 	@CGO_ENABLED=0 go build -o bin/mongodb-database-plugin ./plugins/database/mongodb/mongodb-database-plugin
 
+govendor:
+	go get github.com/kardianos/govendor
+
+use-mesosphere-zookeeper-fork: govendor
+	find . \
+		-name '*.go' \
+		-not -path '*/vendor/*' \
+		-not -path '*/.git/*' \
+		-exec sed -i '' -e 's#samuel/go-zookeeper#mesosphere/go-zookeeper#' {} \;
+	govendor fetch github.com/mesosphere/go-zookeeper/...@695728a4bf3f67863927695f75a01af1859b59fc
+
 .PHONY: bin default prep test vet bootstrap fmt fmtcheck mysql-database-plugin mysql-legacy-database-plugin cassandra-database-plugin postgresql-database-plugin mssql-database-plugin hana-database-plugin mongodb-database-plugin
