@@ -12,7 +12,7 @@ import (
 	log "github.com/mgutz/logxi/v1"
 
 	metrics "github.com/armon/go-metrics"
-	"github.com/samuel/go-zookeeper/zk"
+	"github.com/mesosphere/go-zookeeper/zk"
 )
 
 const (

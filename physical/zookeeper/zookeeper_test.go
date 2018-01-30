@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/vault/physical"
 	log "github.com/mgutz/logxi/v1"
 
-	"github.com/samuel/go-zookeeper/zk"
+	"github.com/mesosphere/go-zookeeper/zk"
 )
 
 func TestZooKeeperBackend(t *testing.T) {
